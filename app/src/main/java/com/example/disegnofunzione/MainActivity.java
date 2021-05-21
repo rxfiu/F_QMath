@@ -1,23 +1,19 @@
 package com.example.disegnofunzione;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.res.ResourcesCompat;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PixelFormat;
 import android.graphics.Rect;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.text.TextPaint;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.ImageView;
-
-import java.util.ResourceBundle;
 
 public class MainActivity extends AppCompatActivity {
     float centerX, centerY, endX, endY;
@@ -26,54 +22,100 @@ public class MainActivity extends AppCompatActivity {
     float offset = 10;
     float scale = 100f, scaleX = 1, scaleY = 1;
 
+    public Graph getGraph() {
+        return graph;
+    }
+
+    private Graph graph;
+
+    private void configGraph() {
+        final ImageView img = findViewById(R.id.imageView);
+        img.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                //Remove it here unless you want to get this callback for EVERY
+                //layout pass, which can get you into infinite loops if you ever
+                //modify the layout from within this method.
+                img.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                //Now you can get the width and height from content
+                int width = img.getWidth();
+                int height = img.getHeight();
+
+                bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+                img.setImageBitmap(bitmap);
+
+                Canvas canvas = new Canvas(bitmap);
+                graph = new Graph(canvas);
+            }
+        });
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getWindow().setFormat(PixelFormat.RGB_565);
+        configGraph();
     }
 
-    public void onButtonTestClick(View v)
-    {
-        ImageView img = findViewById(R.id.imageView);
-        int width = img.getWidth();
-        int height = img.getHeight();
+    public void onButtonAddFunctionClick(View v) {
 
-        bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        img.setImageBitmap(bitmap);
+        EditText funcTxt = findViewById(R.id.editTextFunction);
+        String fx = funcTxt.getText().toString();
 
-        Canvas canvas = new Canvas(bitmap);
+        Graph graph = getGraph();
 
-        /*disegna grafico vuoto */
-        Paint paint = new Paint();
-        paint.setColor(Color.BLACK);
-        paint.setStrokeWidth(1);
+        graph.addFunction(fx);
+//        ImageView img = findViewById(R.id.imageView);
+//        int width = img.getWidth();
+//        int height = img.getHeight();
+//
+//        bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+//        img.setImageBitmap(bitmap);
+//
+//        Canvas canvas = new Canvas(bitmap);
+//
+//        /*disegna grafico vuoto */
+//        Paint paint = new Paint();
+//        paint.setColor(Color.BLACK);
+//        paint.setStrokeWidth(1);
+//
+//        endX = canvas.getClipBounds().right;
+//        endY = canvas.getClipBounds().bottom;
+//        centerX = canvas.getClipBounds().centerX();
+//        centerY = canvas.getClipBounds().centerY();
+//
+//        canvas.drawLine(centerX, 0, centerX, endY, paint);
+//        canvas.drawLine(0, centerY, endX, centerY, paint);
+//        //frecce
+//
+//        drawArrows(canvas);
+//        drawScale(canvas, scale);
+//        drawIndexes(canvas, scale);
+//
+//
+//        /*prepara funzione*/
+//        EditText funcTxt = findViewById(R.id.FunctionText);
+//        String funzione = funcTxt.getText().toString();
+//        try {
+//            mathFunction = new Function(funzione);
+//        }
+//        catch (Exception e) {
+//            mathFunction = new Function("0");
+//        }
+//
+//        /*disegna*/
+//        disegnaFunzione(bitmap);
+    }
 
-        endX = canvas.getClipBounds().right;
-        endY = canvas.getClipBounds().bottom;
-        centerX = canvas.getClipBounds().centerX();
-        centerY = canvas.getClipBounds().centerY();
+    public void onButtonDeleteFunctionClick(View v){
+        EditText funcTxt = findViewById(R.id.editTextFunction);
+        String fx = funcTxt.getText().toString();
 
-        canvas.drawLine(centerX, 0, centerX, endY, paint);
-        canvas.drawLine(0, centerY, endX, centerY, paint);
-        //frecce
+        Graph graph = getGraph();
 
-        drawArrows(canvas);
-        drawScale(canvas, scale);
-        drawIndexes(canvas, scale);
-
-
-        /*prepara funzione*/
-        EditText funcTxt = findViewById(R.id.FunctionText);
-        String funzione = funcTxt.getText().toString();
-        try {
-            mathFunction = new Function(funzione);
-        }
-        catch (Exception e) {
-            mathFunction = new Function("0");
-        }
-
-        /*disegna*/
-        disegnaFunzione(bitmap);
+        graph.deleteFunction(fx);
     }
 
 

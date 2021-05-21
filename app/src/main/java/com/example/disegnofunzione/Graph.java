@@ -242,4 +242,10 @@ public class Graph {
         //functions.add(functionToDraw);
         //drawFunction(functions.get(0));
     }
+    public void deleteFunction(String fx) {
+        FunctionToDraw functionToDraw = new FunctionToDraw(this, fx, Color.WHITE);
+        eraseFunction(functionToDraw);
+        //functions.add(functionToDraw);
+        //drawFunction(functions.get(0));
+    }
 }
