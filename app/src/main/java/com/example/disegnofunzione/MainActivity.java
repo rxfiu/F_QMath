@@ -1,6 +1,8 @@
 package com.example.disegnofunzione;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -15,6 +17,9 @@ import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
     float centerX, centerY, endX, endY;
     Bitmap bitmap;
@@ -22,12 +27,47 @@ public class MainActivity extends AppCompatActivity {
     float offset = 10;
     float scale = 100f, scaleX = 1, scaleY = 1;
 
+
+    RecyclerViewFunctionsAdapter adapter;
     public Graph getGraph() {
         return graph;
     }
 
     private Graph graph;
 
+    public List<FunctionToDraw> getFunctions() {
+        return functions;
+    }
+
+    List<FunctionToDraw> functions;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        //getWindow().setFormat(PixelFormat.RGB_565);
+        functions = new ArrayList<FunctionToDraw>();
+
+        functions.add(new FunctionToDraw(getGraph(), "x", Color.RED));
+        functions.add(new FunctionToDraw(getGraph(), "x", Color.RED));
+        //configRecyclerView();
+        configGraph();
+    }
+    private void configRecyclerView() {
+//        ArrayList<String> animalNames = new ArrayList<>();
+//        animalNames.add("Horse");
+//        animalNames.add("Cow");
+//        animalNames.add("Camel");
+//        animalNames.add("Sheep");
+//        animalNames.add("Goat");
+
+        // set up the RecyclerView
+        RecyclerView recyclerView = findViewById(R.id.recyclerViewFunctions);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new RecyclerViewFunctionsAdapter(this, getGraph(), getFunctions());
+        //adapter.setClickListener(this);
+        recyclerView.setAdapter(adapter);
+    }
     private void configGraph() {
         final ImageView img = findViewById(R.id.imageView);
         img.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -47,16 +87,9 @@ public class MainActivity extends AppCompatActivity {
 
                 Canvas canvas = new Canvas(bitmap);
                 graph = new Graph(canvas);
+                configRecyclerView();
             }
         });
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        getWindow().setFormat(PixelFormat.RGB_565);
-        configGraph();
     }
 
     public void onButtonAddFunctionClick(View v) {
@@ -67,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
         Graph graph = getGraph();
 
         graph.addFunction(fx);
+
 //        ImageView img = findViewById(R.id.imageView);
 //        int width = img.getWidth();
 //        int height = img.getHeight();

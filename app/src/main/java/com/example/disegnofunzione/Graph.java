@@ -112,7 +112,7 @@ public class Graph {
         functionPaint.setStrokeWidth(3);
         functionPaint.setColor(Color.BLACK);
         functionPaint.setStyle(Paint.Style.STROKE);
-        functionPaint.setAntiAlias(true);
+        //functionPaint.setAntiAlias(true);
         functionPaint.setDither(true);
 
     }

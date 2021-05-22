@@ -8,7 +8,19 @@ public class Function {
     private ExpressionBuilder Builder;
     private Expression Function;
 
+    public String getStringFunction() {
+        return stringFunction;
+    }
+
+    private String stringFunction;
+
+    @Override
+    public String toString() {
+        return getStringFunction();
+    }
+
     public Function(String stringFunction) {
+        this.stringFunction = stringFunction;
         Builder = new ExpressionBuilder(stringFunction)
                 .variable(VAR);
         Function = Builder.build();

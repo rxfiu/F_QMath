@@ -29,6 +29,11 @@ public class FunctionToDraw {
         return getGraph().getCanvas();
     }
 
+    @Override
+    public String toString() {
+        return getFunction().toString();
+    }
+
     private Function getFunction() {
         return function;
     }
