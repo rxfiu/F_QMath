@@ -4,14 +4,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PixelFormat;
+import android.graphics.Point;
+import android.graphics.PointF;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.EditText;
@@ -27,6 +31,10 @@ public class MainActivity extends AppCompatActivity {
     float offset = 10;
     float scale = 100f, scaleX = 1, scaleY = 1;
 
+
+    public RecyclerViewFunctionsAdapter getAdapter() {
+        return adapter;
+    }
 
     RecyclerViewFunctionsAdapter adapter;
     public Graph getGraph() {
@@ -48,8 +56,8 @@ public class MainActivity extends AppCompatActivity {
         //getWindow().setFormat(PixelFormat.RGB_565);
         functions = new ArrayList<FunctionToDraw>();
 
-        functions.add(new FunctionToDraw(getGraph(), "x", Color.RED));
-        functions.add(new FunctionToDraw(getGraph(), "x", Color.RED));
+//        functions.add(new FunctionToDraw(getGraph(), "x", Color.RED));
+//        functions.add(new FunctionToDraw(getGraph(), "x", Color.RED));
         //configRecyclerView();
         configGraph();
     }
@@ -67,6 +75,43 @@ public class MainActivity extends AppCompatActivity {
         adapter = new RecyclerViewFunctionsAdapter(this, getGraph(), getFunctions());
         //adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
+    }
+    private void configScrolling() {
+        final ImageView imageView = findViewById(R.id.imageView);
+        final Graph g = getGraph();
+        //noinspection AndroidLintClickableViewAccessibility
+        imageView.setOnTouchListener(new View.OnTouchListener() {
+            PointF startPoint = new PointF();
+            PointF endPoint = new PointF();
+
+            @SuppressLint("ClickableViewAccessibility")
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                switch (event.getAction()) {
+
+                    case MotionEvent.ACTION_MOVE:
+                        endPoint.set(event.getX(), event.getY());
+                        PointF dx = new PointF(
+                                startPoint.x - endPoint.x,
+                                startPoint.y - endPoint.y);
+                        g.getBounds().setOffsetX(dx.x);
+                        g.getBounds().setOffsetY(dx.y);
+                        g.reDrawAll();
+                        break;
+                    case MotionEvent.ACTION_DOWN:
+                        startPoint.set(event.getX(), event.getY());
+                        break;
+                    case MotionEvent.ACTION_UP:
+
+                        break;
+                    default:
+                        break;
+                }
+
+                return true;
+            }
+        });
     }
     private void configGraph() {
         final ImageView img = findViewById(R.id.imageView);
@@ -86,8 +131,9 @@ public class MainActivity extends AppCompatActivity {
                 img.setImageBitmap(bitmap);
 
                 Canvas canvas = new Canvas(bitmap);
-                graph = new Graph(canvas);
+                graph = new Graph(canvas, getFunctions());
                 configRecyclerView();
+                configScrolling();
             }
         });
     }
@@ -99,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
 
         Graph graph = getGraph();
 
-        graph.addFunction(fx);
+        FunctionManager.addFunction(fx, getFunctions(), graph, getAdapter());
 
 //        ImageView img = findViewById(R.id.imageView);
 //        int width = img.getWidth();

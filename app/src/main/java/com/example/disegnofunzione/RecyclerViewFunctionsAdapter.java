@@ -14,9 +14,9 @@ import java.util.List;
 
 public class RecyclerViewFunctionsAdapter extends RecyclerView.Adapter<RecyclerViewFunctionsAdapter.ViewHolder> {
 
-    Graph graph;
-    List<FunctionToDraw> functions;
-    LayoutInflater inflater;
+    private Graph graph;
+    private List<FunctionToDraw> functions;
+    private LayoutInflater inflater;
 
     RecyclerViewFunctionsAdapter(Context context, Graph graph, List<FunctionToDraw> data) {
         this.graph = graph;
@@ -33,14 +33,16 @@ public class RecyclerViewFunctionsAdapter extends RecyclerView.Adapter<RecyclerV
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerViewFunctionsAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerViewFunctionsAdapter.ViewHolder holder, final int position) {
         final FunctionToDraw fx = functions.get(position);
         holder.textViewFunction.setText(fx.toString());
+        holder.buttonDeleteFunction.setBackgroundColor(fx.getColor());
+        final RecyclerViewFunctionsAdapter adapter = this;
         holder.buttonDeleteFunction.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        graph.deleteFunction(fx.toString());
+                        FunctionManager.deleteFunction(position, functions, graph, adapter);
                     }
                 }
                 );
@@ -51,6 +53,13 @@ public class RecyclerViewFunctionsAdapter extends RecyclerView.Adapter<RecyclerV
         return functions.size();
     }
 
+    public void add() {
+        notifyItemInserted(functions.size() - 1);
+    }
+    public void removeAt(int position) {
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, functions.size());
+    }
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView textViewFunction;
         Button buttonDeleteFunction;
@@ -60,50 +69,5 @@ public class RecyclerViewFunctionsAdapter extends RecyclerView.Adapter<RecyclerV
             textViewFunction = itemView.findViewById(R.id.textViewFunctionText);
             buttonDeleteFunction = itemView.findViewById(R.id.buttonFunctionDelete);
         }
-
-//        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-//        TextView myTextView;
-//
-//        ViewHolder(View itemView) {
-//            super(itemView);
-//            myTextView = itemView.findViewById(R.id.tvAnimalName);
-//            itemView.setOnClickListener(this);
-//        }
-//
-//        @Override
-//        public void onClick(View view) {
-//            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
-//        }
-//    }
-//
-//    // convenience method for getting data at click position
-//    String getItem(int id) {
-//        return mData.get(id);
-//    }
-//
-//    // allows clicks events to be caught
-//    void setClickListener(ItemClickListener itemClickListener) {
-//        this.mClickListener = itemClickListener;
-//    }
-//
-//    // parent activity will implement this method to respond to click events
-//    public interface ItemClickListener {
-//        void onItemClick(View view, int position);
-//    }
     }
-
-//    // convenience method for getting data at click position
-//    String getItem(int id) {
-//        return mData.get(id);
-//    }
-//
-//    // allows clicks events to be caught
-//    void setClickListener(ItemClickListener itemClickListener) {
-//        this.mClickListener = itemClickListener;
-//    }
-//
-//    // parent activity will implement this method to respond to click events
-//    public interface ItemClickListener {
-//        void onItemClick(View view, int position);
-//    }
 }
