@@ -3,49 +3,36 @@ package com.example.disegnofunzione;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 
+//rappresenta una funzione, utilizzando la libreria exp4j
 public class Function {
-    private String VAR = "x";
-    private ExpressionBuilder Builder;
-    private Expression Function;
+    private String var = "x";       //variabile
+
+    private ExpressionBuilder builder;      //builder, serve per costruire la funzione
+
+    private Expression function;    //funzione vera e propria
 
     public String getStringFunction() {
         return stringFunction;
     }
 
-    private String stringFunction;
+    private String stringFunction;      //funzione (in formato stampabile)
 
     @Override
-    public String toString() {
+    public String toString() {      //ridefinizione di toString(), per comodità
         return getStringFunction();
     }
 
-    public Function(String stringFunction) {
+    public Function(String stringFunction) {        //costruttore, a partire da una stringa
         this.stringFunction = stringFunction;
-        Builder = new ExpressionBuilder(stringFunction)
-                .variable(VAR);
-        Function = Builder.build();
+        builder = new ExpressionBuilder(stringFunction)
+                .variable(var);
+        function = builder.build();
     }
 
-    public double Evaluate(double x) throws ArithmeticException {
-        double result = Function
-                .setVariable(VAR, x)
+    public double Evaluate(double x) throws ArithmeticException {       //calcola f(x)
+        double result = function
+                .setVariable(var, x)
                 .evaluate();
         return result;
-    }
-
-    private ExpressionBuilder getBuilder() {
-        return Builder;
-    }
-
-    private void setBuilder(ExpressionBuilder builder) {
-        Builder = builder;
-    }
-
-    private Expression getFunction() {
-        return Function;
-    }
-
-    private void setFunction(Expression function) {
-        Function = function;
     }
 }

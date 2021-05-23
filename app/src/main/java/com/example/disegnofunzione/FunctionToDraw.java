@@ -8,13 +8,15 @@ import android.os.FileUriExposedException;
 
 import java.util.Objects;
 
+//analoga a Funztion, possiede parametri in più per poter disegnare su una superficie
 public class FunctionToDraw {
     public int getColor() {
         return color;
     }
+    private int color;
 
-    private Graph getGraph() {
-        return graph;
+    private Canvas getCanvas() {
+        return getGraph().getCanvas();
     }
 
     private float getScale() {
@@ -25,36 +27,42 @@ public class FunctionToDraw {
         return getGraph().getBounds();
     }
 
-    private Canvas getCanvas() {
-        return getGraph().getCanvas();
+    private Graph getGraph() {
+        return graph;
     }
+
+    private Graph graph;
+
+
+    private Function getFunction() {
+        return function;
+    }
+    private Function function;
 
     @Override
     public String toString() {
         return getFunction().toString();
     }
 
-    private Function getFunction() {
-        return function;
-    }
-    private Graph graph;
-    private int color;
-    private Function function;
-
     private FunctionToDraw() {
 
     }
-    public FunctionToDraw(Graph graph, Function function, int color) {
+
+    public FunctionToDraw(Graph graph, Function function, int color) {      //costruttore
         this.graph = graph;
         this.function = function;
         this.color = color;
     }
-    public FunctionToDraw(Graph graph, String fx , int color) {
+
+    public FunctionToDraw(Graph graph, String fx , int color) {     //costruttore
         this.graph = graph;
         this.function = new Function(fx);
         this.color = color;
     }
-    private float f(float x) {
+
+    private float f(float x) {      //calcola f(x), tenendo conto dei bordi del riquadro,
+                                    // tenendo conto che il punto (0,0) è in alto a sinistra e
+                                    // bisogna "spostarlo" nel vero centro
         Bounds bounds = getBounds();
         float scale = getScale();
         Function function = getFunction();
@@ -64,7 +72,8 @@ public class FunctionToDraw {
 
         return (float)(res);
     }
-    private Path drawPath() {
+
+    private Path drawPath() {       //crea un immagine vettoriale della funzione
         Bounds bounds = getBounds();
         Path path = new Path();
         boolean move = true;
@@ -86,18 +95,24 @@ public class FunctionToDraw {
         }
         return path;
     }
-    private void drawFunction(Canvas canvas, Paint paint, int color) {
-        // Canvas canvas = getCanvas();
+
+    private void drawFunction(Canvas canvas, Paint paint, int color) {      //disegna se stessa su una
+                                                                            // superficie, più
+                                                                            // generico
         paint.setColor(color);
 
         Path path = drawPath();
 
         canvas.drawPath(path, paint);
     }
-    public void drawFunction(Canvas canvas, Paint paint) {
+
+    public void drawFunction(Canvas canvas, Paint paint) {      //disegna se stessa su una
+                                                                // superficie
         drawFunction(canvas,paint,this.color);
     }
-    public void eraseFunction(Canvas canvas, Paint paint) {
+
+    public void eraseFunction(Canvas canvas, Paint paint) {     //cancella se stessa da una
+                                                                // superficie
         drawFunction(canvas,paint,Color.WHITE);
     }
 }

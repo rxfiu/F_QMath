@@ -1,61 +1,60 @@
 package com.example.disegnofunzione;
 
+//classe per salvare dati inerenti alla dimensione del riquadro (nel nostro caso, utilizzato per
+// il riquadro di una tela)
 public class Bounds {
 
-    private float offset = 0.01f;
+    private float offset = 0.04f;   //moltiplicatore, serve epr adattare la distanza di scorrimento
 
-    public void setCenterX(float centerX) {
-        this.centerX = centerX;
-    }
-
-    public void setCenterY(float centerY) {
-        this.centerY = centerY;
-    }
-
-    private float centerX;
-    private float centerY;
-    private float endX;
-    private float endY;
-
-    public float getCenterX() {
+    public float getCenterX() {     //getter centerX
         return centerX;
     }
 
-    public float getCenterY() {
+    public void setCenterX(float centerX) {     //setter centerX
+        this.centerX = centerX;
+    }
+
+    private float centerX;      //centro riquadro (x)
+
+    public float getCenterY() {     //getter centerY
         return centerY;
     }
 
-//    public float getOffsetX() {
-//        return offsetX;
-//    }
-
-    public void setOffsetX(float offsetX) {
-        setCenterX(getCenterX() - Math.round(offsetX*offset));
+    public void setCenterY(float centerY) {     //setter centerY
+        this.centerY = centerY;
     }
 
-//    public float getOffsetY() {
-//        return offsetY;
-//    }
+    private float centerY;      //centro riquadro (y)
 
-    public void setOffsetY(float offsetY) {
-        setCenterY(getCenterY() - Math.round(offsetY*offset));
-    }
-
-    public float getEndX() {
+    public float getEndX() {    //getter endX
         return endX;
     }
 
-    public float getEndY() {
+    private float endX;     //fine riquadro (x)
+
+    public float getEndY() {        //getter endY
         return endY;
     }
-    private Bounds() {
+
+    private float endY;     //fine riquadro (x)
+
+
+    private Bounds() {      //costruttore di default, implementato per sicurezza...
 
     }
 
-    public Bounds(float centerX, float centerY, float endX, float endY) {
-        this.centerX = centerX -100;
-        this.centerY = centerY -100;
+    public Bounds(float centerX, float centerY, float endX, float endY) {       //costruttore
+        this.centerX = centerX;
+        this.centerY = centerY;
         this.endX = endX;
         this.endY = endY;
+    }
+
+    public void setOffsetX(float offsetX) {     //sposta il centro del riquadro di offsetX
+        setCenterX(getCenterX() - Math.round(offsetX*offset));
+    }
+
+    public void setOffsetY(float offsetY) {     //sposta il centro del riquadro di offsetY
+        setCenterY(getCenterY() - Math.round(offsetY*offset));
     }
 }

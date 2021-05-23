@@ -23,7 +23,10 @@
         android:id="@+id/constraintLayoutFunction"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView">
@@ -42,11 +45,11 @@
 
         <Button
             android:id="@+id/buttonAddFunction"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="74dp"
+            android:layout_height="36dp"
             android:background="#C6C6C6"
             android:onClick="onButtonAddFunctionClick"
-            android:text="Aggiungi"
+            android:text="Disegna"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/editTextFunction"
@@ -56,6 +59,10 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="202dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -66,6 +73,38 @@
             android:id="@+id/recyclerViewFunctions"
             android:layout_width="wrap_content"
             android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="44dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="272dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageButton
+            android:id="@+id/imageButtonZoomIn"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginBottom="0dp"
+            android:onClick="onImageButtonZoomIn"
+            app:srcCompat="@drawable/ic_action_name" />
+
+        <ImageButton
+            android:id="@+id/imageButtonZoomOut"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginBottom="0dp"
+            android:onClick="onImageButtonZoomOut"
+            app:srcCompat="@drawable/zoom_out" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

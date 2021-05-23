@@ -10,20 +10,48 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 public class Graph {
-    private Paint axesPaint;
-    private float axesPaintWidth = 1;
+    public Paint getAxesPaint() {
+        return axesPaint;
+    }
 
-    private float scaleHeight = 12;
+    private Paint axesPaint;        //pennello assi
 
-    private Paint arrowsPaint;
+    public float getAxesPaintWidth() {
+        return axesPaintWidth;
+    }
+
+    private float axesPaintWidth = 1;       //spessore pennelli
+
+    public float getScaleHeight() {
+        return scaleHeight;
+    }
+
+    private float scaleHeight = 12;     //lunghezza tratteggi (assi)
+
+    public Paint getArrowsPaint() {
+        return arrowsPaint;
+    }
+
+
+    private Paint arrowsPaint;      //pennello freccette (assi)
+
+    public float getArrowsPaintWidth() {
+        return arrowsPaintWidth;
+    }
+
     private float arrowsPaintWidth = 1.5f;
-    private float arrowsHeight = 12;
+
+    public float getArrowsHeight() {
+        return arrowsHeight;
+    }
+
+    private float arrowsHeight = 12;        //altezza fecce (assi)
 
     public Paint getIndexesPaint() {
         return indexesPaint;
     }
 
-    private Paint indexesPaint;
+    private Paint indexesPaint;     //pennello indici (assi)
     private float indexesPaintTextSize = 35;
 
 
@@ -31,70 +59,57 @@ public class Graph {
         return functionPaint;
     }
 
-    private Paint functionPaint;
+    private Paint functionPaint;    //pennello funzione
     private float functionPaintWidth = 3;
+
+    Canvas getCanvas() {
+        return canvas;
+    }
 
     private Canvas canvas;
 
-    private Bounds bounds;
-
-    private float scale = 150;
-
-    public void setFunctions(List<FunctionToDraw> functions) {
-        this.functions = functions;
-    }
-
-    private List<FunctionToDraw> functions;
-
-    public Paint getAxesPaint() {
-        return axesPaint;
-    }
-
-    public float getAxesPaintWidth() {
-        return axesPaintWidth;
-    }
-
-    public float getScaleHeight() {
-        return scaleHeight;
-    }
-
-    public Paint getArrowsPaint() {
-        return arrowsPaint;
-    }
-
-    public float getArrowsPaintWidth() {
-        return arrowsPaintWidth;
-    }
-
-    public float getArrowsHeight() {
-        return arrowsHeight;
-    }
-
-    public List<FunctionToDraw> getFunctions() {
-        return functions;
-    }
-
     Bounds getBounds() {
         return bounds;
+    }
+
+    private Bounds bounds;
+
+    public void setScale(float scale) {
+        this.scale = scale > 0 ? scale : 1;     //si evita che scale sia minore di 1
     }
 
     float getScale() {
         return scale;
     }
 
-    Canvas getCanvas() {
-        return canvas;
+    private float scale = 100;      //unità in pixel, quanti pixel rappresentano un unità
+
+    public float getScaleFactor() {
+        return scaleFactor;
     }
+
+    private float scaleFactor = 10;     //quantità di riduzione o aumento zoom per passo
+
+    public List<FunctionToDraw> getFunctions() {
+        return functions;
+    }
+
+    public void setFunctions(List<FunctionToDraw> functions) {
+        this.functions = functions;
+    }
+
+    private List<FunctionToDraw> functions;     //lista di funzioni da disegnare
 
     private Graph() {
 
     }
 
-    public Graph(Canvas canvas, List<FunctionToDraw> functions) {
+    public Graph(Canvas canvas, List<FunctionToDraw> functions) {       //costruttore
         init(canvas, functions);
     }
 
-    private void init(Canvas canvas, List<FunctionToDraw> functions) {
+    private void init(Canvas canvas, List<FunctionToDraw> functions) {      //inizializzatore
+                                                                            // dell'oggetto, viene usato come base dai costruttori
         this.canvas = canvas;
         setFunctions(functions);
         setBounds();
@@ -116,11 +131,11 @@ public class Graph {
     private void setPaint() {
         axesPaint = new Paint();
         axesPaint.setColor(Color.BLACK);
-        axesPaint.setStrokeWidth(axesPaintWidth);
+        axesPaint.setStrokeWidth(getAxesPaintWidth());
 
         arrowsPaint = new Paint();
         arrowsPaint.setColor(Color.BLACK);
-        arrowsPaint.setStrokeWidth(arrowsPaintWidth);
+        arrowsPaint.setStrokeWidth(getArrowsPaintWidth());
 
         indexesPaint = new Paint();
         arrowsPaint.setColor(Color.BLACK);
@@ -274,6 +289,22 @@ public class Graph {
         for (FunctionToDraw functionToDraw : functions) {
            drawFunction(functionToDraw);
         }
+    }
+
+    private void zoom(boolean in) {
+        float scale = getScale();
+        float scaleFactor = getScaleFactor();
+        setScale(in ? scale + scaleFactor : scale - scaleFactor);
+    }
+
+    void zoomIn() {
+        zoom(true);
+        reDrawAll();
+    }
+
+    void zoomOut() {
+        zoom(false);
+        reDrawAll();
     }
 
     private void eraseFunctions() {
