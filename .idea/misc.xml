@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Coding/ITIS ROSSI/F_QMath/app/src/main/res/drawable-anydpi/error(1).xml" value="0.1855" />
+        <entry key="..\:/Coding/ITIS ROSSI/F_QMath/app/src/main/res/drawable/border(1).xml" value="0.1855" />
+        <entry key="..\:/Coding/ITIS ROSSI/F_QMath/app/src/main/res/layout/activity_summary.xml" value="0.7783572359843546" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
